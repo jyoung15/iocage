@@ -222,7 +222,9 @@ __legacy_start () {
         ip4_addr=""
     fi
 
-    if [ "$ip4_addr" ]; then
+    ip4="$(__get_jail_prop ip4 $name)"
+    : ${ip4:=new}
+    if [ "$ip4" = new ]; then
         ip4_addr_propline="ip4.addr=$ip4_addr"
     else
         ip4_addr_propline=""
@@ -232,7 +234,9 @@ __legacy_start () {
         ip6_addr=""
     fi
 
-    if [ "$ip6_addr" ]; then
+    ip6="$(__get_jail_prop ip6 $name)"
+    : ${ip6:=new}
+    if [ "$ip6" = new ]; then
         ip6_addr_propline="ip6.addr=$ip6_addr"
     else
         ip6_addr_propline=""
@@ -242,10 +246,10 @@ __legacy_start () {
         jail -c \
         $ip4_addr_propline \
         ip4.saddrsel="$(__get_jail_prop ip4_saddrsel $name)" \
-        ip4="$(__get_jail_prop ip4 $name)" \
+        ip4="$ip4" \
         $ip6_addr_propline \
         ip6.saddrsel="$(__get_jail_prop ip6_saddrsel $name)" \
-        ip6="$(__get_jail_prop ip6 $name)" \
+        ip6="$ip6" \
         name="ioc-$(__get_jail_prop host_hostuuid $name)" \
         host.hostname="$(__get_jail_prop hostname $name)" \
         path="${jail_path}/root" \
@@ -283,7 +287,7 @@ __legacy_start () {
         jail -c \
         $ip4_addr_propline \
         ip4.saddrsel="$(__get_jail_prop ip4_saddrsel $name)" \
-        ip4="$(__get_jail_prop ip4 $name)" \
+        ip4="$ip4" \
         name="ioc-$(__get_jail_prop host_hostuuid $name)" \
         host.hostname="$(__get_jail_prop hostname $name)" \
         path="${jail_path}/root" \
